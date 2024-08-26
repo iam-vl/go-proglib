@@ -143,7 +143,26 @@ if err != nil {
 
 ## Handle files 
 
-### Opening and closing
+### Opening and closing 
+
+Basic funcs: 
+```go
+func OpenFile(name string, flag int, perm FileMode) (*File, error)
+// Open wraps OpenFile (read-only)
+func Open(name string) (*File, error) {
+	return OpenFile(name, O_RDONLY, 0)
+}
+```
+About `OpenFile()`: 
+
+Example: 
+```go
+file, err := os.Open("filename.txt")
+if err != nil {
+	log.Fatal(err)
+}
+defer file.Close()
+```
 
 ### Flags 
 
@@ -151,20 +170,50 @@ if err != nil {
 const (
 	O_RDONLY int = syscall.O_RDONLY // открыть файл только для чтения.
 	O_WRONLY int = syscall.O_WRONLY // открыть файл только для записи.
-	O_RDWR int = syscall.O_RDWR // открыть файл только для чтения и записи.
+	O_RDWR   int = syscall.O_RDWR   // открыть файл только для чтения и записи.
 	O_APPEND int = syscall.O_APPEND // добавлять данные в файл при записи.
-	O_CREATE int = syscall.O_CREAT // создать новый файл, если его не существует.
-	O_EXCL int = syscall.O_EXCL // используется с O_CREATE, открытие завершится с ошибкой, если файл существует
-	O_SYNC int = syscall.O_SYNC // открыть для синхронного ввода-вывода
-	O_TRUNC int = syscall.O_TRUNC // обрезать при открытии файл, доступный для записи
+	O_CREATE int = syscall.O_CREAT  // создать новый файл, если его не существует.
+	O_EXCL   int = syscall.O_EXCL   // используется с O_CREATE, открытие завершится с ошибкой, если файл существует
+	O_SYNC   int = syscall.O_SYNC   // открыть для синхронного ввода-вывода
+	O_TRUNC  int = syscall.O_TRUNC  // обрезать при открытии файл, доступный для записи
 )
 ```
 
 ### Creating, renaming, deleting files 
+
+Basic funcs: 
+```go
+```
+Example: 
+```go
+```
+
 ### Reading files 
+
+Basic funcs: 
+```go
+```
+Example: 
+```go
+```
 ### Writing to file 
+
+Basic funcs: 
+```go
+```
+Example: 
+```go
+```
+
 ### Choosing packages 
 Packages to choose from: `io`, `bufio`, `os`. 
+
+Basic funcs: 
+```go
+```
+Example: 
+```go
+```
 
 ## Task 1
 Напишите программу для подсчета количества слов в стандартном потоке ввода и последующего их вывода на экран с символом переноса строки. Ввод-вывод осуществляйте с использованием пакета bufio.
