@@ -140,3 +140,37 @@ if err != nil {
 	fmt.Fprintln(os.Stderr, "reading os.Stdin:", err)
 }
 ```
+
+## Handle files 
+
+### Opening and closing
+
+### Flags 
+
+```go
+const (
+	O_RDONLY int = syscall.O_RDONLY // открыть файл только для чтения.
+	O_WRONLY int = syscall.O_WRONLY // открыть файл только для записи.
+	O_RDWR int = syscall.O_RDWR // открыть файл только для чтения и записи.
+	O_APPEND int = syscall.O_APPEND // добавлять данные в файл при записи.
+	O_CREATE int = syscall.O_CREAT // создать новый файл, если его не существует.
+	O_EXCL int = syscall.O_EXCL // используется с O_CREATE, открытие завершится с ошибкой, если файл существует
+	O_SYNC int = syscall.O_SYNC // открыть для синхронного ввода-вывода
+	O_TRUNC int = syscall.O_TRUNC // обрезать при открытии файл, доступный для записи
+)
+```
+
+### Creating, renaming, deleting files 
+### Reading files 
+### Writing to file 
+### Choosing packages 
+Packages to choose from: `io`, `bufio`, `os`. 
+
+## Task 1
+Напишите программу для подсчета количества слов в стандартном потоке ввода и последующего их вывода на экран с символом переноса строки. Ввод-вывод осуществляйте с использованием пакета bufio.
+
+## Task 2
+Напишите программу для подсчета общей стоимости заказа. Данные о купленных товарах находятся в файле order.txt в формате "товар-цена". Размер файла может быть довольно большим, поэтому не стоит считывать его целиком.
+
+
+
