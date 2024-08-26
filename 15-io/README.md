@@ -117,11 +117,26 @@ func BufioWriteStr() {
 ```
 
 ### Bufio.Scanner 
+Interface for reading data line by line. 
+Usually combined with `Scanner.Scan()` (iterated over the datasource token, defined by `SplitFunc` type)
 
 Here:
 ```go
+func (s *Scanner) Scan() bool
+// Sets up the splitting function
+// Can be used to scan the file by bytes, runes, strings and words (space-separated)
+func (s *Scanner) Split(split SplitFunc)
+type SplitFunc func(data []byte, atEOF bool) (advance int, token []byte, err error)
 ```
 
 Example: 
 ```go
+sc := bufio.NewScanner(os.Stdin)
+for sc.Scan() {
+	fmt.Println(sc.Text())
+}
+err := sc.Err()
+if err != nil {
+	fmt.Fprintln(os.Stderr, "reading os.Stdin:", err)
+}
 ```
