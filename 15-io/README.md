@@ -157,14 +157,24 @@ About `OpenFile()`:
 
 Example: 
 ```go
-file, err := os.Open("filename.txt")
-if err != nil {
-	log.Fatal(err)
+func OpenCloseFile() {
+	file, err := os.Open("filename.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	fmt.Printf("Variable type: %+T\n", file)
+	fmt.Printf("Value: %+v\n", *file)
+	x1 := reflect.ValueOf(file).Elem()
+	fmt.Printf("Type 2: %s\n", x1)
 }
-defer file.Close()
 ```
 
 ### Flags 
+
+Also see: [Open(2): Linux man page](https://linux.die.net/man/2/open)
+
+The `os` package provides constants wrapping the OS flags: 
 
 ```go
 const (
@@ -181,6 +191,24 @@ const (
 
 ### Creating, renaming, deleting files 
 
+Use funcs: `os.Create()`, `os.Remove()`, and `os.Rename()`:
+
+`Create`: creates or cuts (if already exists) the said file. If creating, create a file with FileMode=0666 (read & write).
+* If successful: the fun returns a `File` with the `O-RDWR` descriptor (can read & write).
+* All errors: `*PathError`.
+```go
+func Create(name string) (*File, error) {
+	return OpenFile(name, O_RDWR|O_CREATE|O_TRUNC, 0666)
+}
+```
+
+`os.Remove` signature: `func Remove(name string) error`: deletes the file or return a `*PathError` error. 
+`Rename()` signature: `func Rename(oldpath, newpath string) error`: moves the file. If `newpath` already exists, the func will overwrite it,
+
+### Reading files 
+
+`os.ReadFile()`, `io.ReadAll()`, `bufio.NewScanner()`, `os.File.Read()`
+
 Basic funcs: 
 ```go
 ```
@@ -188,7 +216,19 @@ Example:
 ```go
 ```
 
-### Reading files 
+Basic funcs: 
+```go
+```
+Example: 
+```go
+```
+
+Basic funcs: 
+```go
+```
+Example: 
+```go
+```
 
 Basic funcs: 
 ```go
