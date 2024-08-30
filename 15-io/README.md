@@ -209,40 +209,97 @@ func Create(name string) (*File, error) {
 
 `os.ReadFile()`, `io.ReadAll()`, `bufio.NewScanner()`, `os.File.Read()`
 
-Basic funcs: 
+If we know the filename, we can use `os.readFile()`. If ok, the func return err = nil. 
+Alternative: `os.ReadFile()` and `io.ReadAll()`. Readall reads from io.reader until the first error / EOF. 
+
 ```go
+func ReadFile1() {
+	data, err := os.ReadFile("filename.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(data))
+}
 ```
 Example: 
 ```go
+func ReadAll1() {
+	file, err := os.Open("filename.txt")
+	if err != nil { log.Fatal(err) }
+	defer file.Close()
+	txt, err := io.ReadAll(file)
+	if err != nil { log.Fatal(err) }
+	fmt.Println(string(txt))
+	fmt.Printf("%s\n", txt)
+}
 ```
 
+With big files, need to read file string by string. Use `bufio.NewScanner()`:
 Basic funcs: 
 ```go
+func ReadLines() {
+	file, _ := os.Open("filename.txt")
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
+	err := scanner.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 ```
+Method `*os.File.Read()`: 
+* Read a fix number of bytes, save them as []byte, return read size + error.
+  
 Example: 
 ```go
+func fRead1() {
+	file, _ := os.Open("filename.txt")
+	defer file.Close()
+	content := make([]byte, 8)
+	_, err := file.Read(content)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(string(content))
+}
 ```
 
-Basic funcs: 
-```go
-```
-Example: 
-```go
-```
-
-Basic funcs: 
-```go
-```
-Example: 
-```go
-```
 ### Writing to file 
 
+Methods: `os.WriteFile()` and `*os.File.Write()`. 
+Перезаписать WriteFile: `func WriteFile(name string, data []byte, perm FileMode) error`
 Basic funcs: 
 ```go
+func WriteFile1() {
+	data := []byte("message from WriteFile")
+	err := os.WriteFile("filename.txt", data, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+```
+
+Method `*os.File.Write()`: record fix size from a []byte, and return the size and errors(): 
+```
+func (f *File) Write(b []byte) (n int, err error)
 ```
 Example: 
 ```go
+func FileWrite1() {
+	file, _ := os.Create("filename.txt")
+	defer file.Close()
+
+	data := []byte("message from Write 2")
+	n, err := file.Write(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(n)
+
+}
 ```
 
 ### Choosing packages 
