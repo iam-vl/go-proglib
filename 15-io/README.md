@@ -286,6 +286,7 @@ Method `*os.File.Write()`: record fix size from a []byte, and return the size an
 ```
 func (f *File) Write(b []byte) (n int, err error)
 ```
+File must be open w/ write access. 
 Example: 
 ```go
 func FileWrite1() {
@@ -298,7 +299,45 @@ func FileWrite1() {
 		log.Fatal(err)
 	}
 	fmt.Println(n)
+}
+```
+WriteString (wrapped Write) - uses string
+```go
+func (f *File) WriteString(s string) (n int, err error) {
+	b := unsafe.Slice(unsafe.StringData(s), len(s))
+	return f.Write(b)
+}
+```
+Example:
+```go
+func WriteString1() {
+	file, _ := os.Create("filename.txt")
+	defer file.Close()
 
+	text := "Message for WriteString"
+	n, _ := file.WriteString(text)
+	fmt.Println(n)
+}
+
+### Append data
+
+Use flag `os.O_APPEND` when opening a file.
+```go
+
+func WriteAppend1() {
+	// file, err := os.OpenFile("filename.txt", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	file, err := os.OpenFile("filename.txt", os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	data := "\nand one more line\\n"
+	n, err := file.WriteString(data)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Wrote %d bytes\n", n)
 }
 ```
 
